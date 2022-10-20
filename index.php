@@ -1,3 +1,33 @@
+<?php
+
+//require i include importjemo code
+//u require ako se baci greska nece se izvrsavati nista na toj stranici, a u include ce nastaviti sa izvrsavanjem
+    require "model/users.php";
+    require "dbBroker.php";
+
+    session_start();
+
+    if(isset($_POST['username']) && isset($_POST['password'])){
+        $uname = $_POST['username'];
+        $upass = $_POST['password'];
+
+        $korisnik = new User(1,$uname,$upass);
+
+      //  $conn = new mysqli();
+        //:: za pristupanje statickoj metodi
+        $odgovor = User::loginUser($korisnik,$conn);
+
+        //odgovor vraca redove, posto je korisnik jedinstven vracace uvek 1 ako ga nadje
+        if($odgovor->num_rows){
+            $_SESSION["user_id"] = $korisnik->id;
+            //ukoliko je sve ok idemo na home page
+            header("Location: home.php");
+        }
+    }
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
